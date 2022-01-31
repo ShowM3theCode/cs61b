@@ -21,7 +21,7 @@ public class MapGenerator implements Serializable {
 	public Pos door = new Pos();
 	
 	private static TETile[][] worldGenerator;
-	private static TERenderer checkRenderer;
+	
     private static Random RANDOM;
 	
 	public MapGenerator (int w, int h, long seed, TETile[][] world) {
@@ -30,9 +30,6 @@ public class MapGenerator implements Serializable {
 		Rooms = new int[WIDTH][HEIGHT];
 		RANDOM = new Random(seed);
 		worldGenerator = world;
-		
-		checkRenderer = new TERenderer();
-		checkRenderer.initialize(WIDTH, HEIGHT);
 		
 		mazeGenerator mg1 = new mazeGenerator();
 		mg1.mazeInitialization();
@@ -129,8 +126,6 @@ public class MapGenerator implements Serializable {
 					addCandidateList(endSpot);
 					
 					breakTheWall(endSpot);    // Break the wall.
-					
-					checkRenderer.renderFrame(worldGenerator);
 					
 					startPoint = endSpot;   // Loop.
 				

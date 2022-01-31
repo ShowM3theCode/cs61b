@@ -175,7 +175,7 @@ private void setupNewGame() {
     endMode = false;
     
     if (inPutStringMode) {
-        ter.renderFrame(world);
+        // ter.renderFrame(world);
         processGame();
     }
 }
@@ -444,7 +444,7 @@ private void processGame() {
         if (StdDraw.hasNextKeyTyped()) {
             String typed = Character.toString(StdDraw.nextKeyTyped());
             processInput(typed);
-            ter.renderFrame(world);
+            // ter.renderFrame(world);
         }
         
         renderGame();
