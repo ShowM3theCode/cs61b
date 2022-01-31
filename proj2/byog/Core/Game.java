@@ -174,10 +174,17 @@ private void setupNewGame() {
     switchSetupMode();
     endMode = false;
     
-    if (inPutStringMode) {
-        // ter.renderFrame(world);
-        processGame();
+    for (int i = 0; i < WIDTH; i++) {
+        for (int j = 0; j < HEIGHT; j++) {
+            System.out.println(world[i][j]);
+        }
     }
+    
+    if (inPutStringMode) {
+        ter.initialize(WIDTH, HEIGHT);
+        ter.renderFrame(world);
+    }
+    
 }
 
 // Loads a previously saved game. If no saved game found, returns null.
@@ -455,13 +462,17 @@ private void processGame() {
 private void renderGame() {
     renderWorld();
     showTileOnHover();
-    StdDraw.pause(10);
+    if (!inPutStringMode) {
+        StdDraw.pause(10);
+    }
 }
 
 /* Renders world */
 private void renderWorld() {
-    StdDraw.setFont();
-    StdDraw.setPenColor();
+    if (!inPutStringMode) {
+        StdDraw.setFont();
+        StdDraw.setPenColor();
+    }
     ter.renderFrame(world);
 }
 
@@ -508,7 +519,7 @@ public void playWithKeyboard() {
  * @return the 2D TETile[][] representing the state of the world
 */
 public TETile[][] playWithInputString(String input) {
-    inPutStringMode =true;
+    inPutStringMode = true;
     processInput(input);
     return world;
 }
