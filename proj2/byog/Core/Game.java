@@ -14,8 +14,6 @@ package byog.Core;
         import byog.TileEngine.TERenderer;
         import byog.TileEngine.TETile;
         import byog.TileEngine.Tileset;
-        
-        // import edu.princeton.cs.introcs.StdDraw;
 
 
 public class Game {
@@ -173,11 +171,6 @@ private void setupNewGame() {
     // switch off setupMode
     switchSetupMode();
     endMode = false;
-    
-    if (inPutStringMode) {
-        ter.initialize(WIDTH, HEIGHT);
-        ter.renderFrame(world);
-    }
     
 }
 
@@ -523,7 +516,7 @@ public TETile[][] playWithInputString(String input) {
 /// Main method just to check this class works itself
 public static void main(String[] args) {
     Game game = new Game();
-    game.playWithInputString("n123s");
+    game.playWithInputString("N16876S");
 }
 
 }
