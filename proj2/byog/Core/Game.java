@@ -9,11 +9,13 @@ package byog.Core;
         import java.io.FileOutputStream;
         import java.io.IOException;
         
+        
         import java.awt.Font;
         
         import byog.TileEngine.TERenderer;
         import byog.TileEngine.TETile;
         import byog.TileEngine.Tileset;
+        import edu.princeton.cs.introcs.StdDraw;
 
 
 public class Game {
@@ -226,7 +228,7 @@ private void load() {
     // switch off setupMode
     switchSetupMode();
     
-    // processGame();
+    processGame();
 }
 
 /* Helper method for load method: rewrite playerX, playerY */
@@ -287,7 +289,7 @@ private void move(String input) {
     }
 }
 
-/* Quits game if entering the door.
+/* Quits game if entering the door. */
 private void gameSuccess() {
     // prepare welcome board window
     StdDraw.enableDoubleBuffering();
@@ -337,7 +339,7 @@ private void renderEndGameBoard() {
     StdDraw.show();
     StdDraw.pause(100);
 }
-*/
+
 /* Quits game saving a current game */
 private void saveAndQuit() {
     // ignore if quit flag : hasn't been inputted in advance
@@ -384,7 +386,7 @@ private void saveAndQuit() {
     }
 }
 
-/* Process keyboard inputs in setupMode
+/* Process keyboard inputs in setupMode */
 private void processWelcome() {
     // prepare welcome board window
     StdDraw.enableDoubleBuffering();
@@ -406,8 +408,8 @@ private void processWelcome() {
     
     processGame();
 }
-*/
-/* Renders welcome board in setupMode
+
+/* Renders welcome board in setupMode */
 private void renderWelcomeBoard() {
     StdDraw.clear(StdDraw.BLACK);
     StdDraw.setPenColor(StdDraw.WHITE);
@@ -431,22 +433,22 @@ private void renderWelcomeBoard() {
     StdDraw.show();
     StdDraw.pause(100);
 }
-*/
-/* Process keyboard inputs in game mode
+
+/* Process keyboard inputs in game mode */
 private void processGame() {
     ter.initialize(WIDTH, HEIGHT);
     while (true) {
         if (StdDraw.hasNextKeyTyped()) {
             String typed = Character.toString(StdDraw.nextKeyTyped());
             processInput(typed);
-            // ter.renderFrame(world);
+            ter.renderFrame(world);
         }
         
         renderGame();
     }
 }
-*/
-/* Renders the current state of the game
+
+/* Renders the current state of the game */
 private void renderGame() {
     renderWorld();
     showTileOnHover();
@@ -455,7 +457,7 @@ private void renderGame() {
     }
 }
 
-/* Renders world
+/* Renders world */
 private void renderWorld() {
     if (!inPutStringMode) {
         StdDraw.setFont();
@@ -463,8 +465,8 @@ private void renderWorld() {
     }
     ter.renderFrame(world);
 }
-*/
-/* Draws text describing the Tile currently under the mouse pointer
+
+/* Draws text describing the Tile currently under the mouse pointer */
 private void showTileOnHover() {
     // turn the position of mouse pointer into xy-coordinate
     int mouseX = (int) StdDraw.mouseX();
@@ -483,16 +485,15 @@ private void showTileOnHover() {
     StdDraw.textLeft(1, HEIGHT - 1, mouseTile.description());
     StdDraw.show();
 }
-*/
 /// Public methods
 
 /**
  * Method used for playing a fresh game. The game should start from the main menu. */
- /*
+ 
 public void playWithKeyboard() {
     processWelcome();
 }
-*/
+
 /**
  * Method used for autograding and testing the game code. The input string will be a series
  * of characters (for example, "n123sswwdasdassadwas", "n123sss:q", "lwww". The game should
