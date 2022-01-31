@@ -39,6 +39,7 @@ private boolean setupMode = true;     // flag to check whether setup has been do
 private boolean endMode = false;
 private boolean newGameMode = false; // flag to check whether a new game is gonna be generated
 private boolean quitMode = false; // flag to check whether a game is supposed to be quited
+private boolean inPutStringMode = false;
 private String seedString = ""; // store input random seed numbers as String
 private TERenderer ter = new TERenderer();
 private TETile[][] world;
@@ -172,6 +173,11 @@ private void setupNewGame() {
     // switch off setupMode
     switchSetupMode();
     endMode = false;
+    
+    if (inPutStringMode) {
+        ter.renderFrame(world);
+        processGame();
+    }
 }
 
 // Loads a previously saved game. If no saved game found, returns null.
@@ -502,6 +508,7 @@ public void playWithKeyboard() {
  * @return the 2D TETile[][] representing the state of the world
 */
 public TETile[][] playWithInputString(String input) {
+    inPutStringMode =true;
     processInput(input);
     return world;
 }
@@ -510,7 +517,7 @@ public TETile[][] playWithInputString(String input) {
 /// Main method just to check this class works itself
 public static void main(String[] args) {
     Game game = new Game();
-    game.playWithKeyboard();
+    game.playWithInputString("n123s");
 }
 
 }
