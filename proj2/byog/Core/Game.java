@@ -15,7 +15,7 @@ package byog.Core;
         import byog.TileEngine.TETile;
         import byog.TileEngine.Tileset;
         
-        import edu.princeton.cs.introcs.StdDraw;
+        // import edu.princeton.cs.introcs.StdDraw;
 
 
 public class Game {
@@ -80,7 +80,7 @@ private void processInput(String input) {
     
 }
 
-// Processes game according to a given single input String
+/* Processes game according to a given single input String */
 private void processInputString(String first) {
     
     if (endMode) {
@@ -233,7 +233,7 @@ private void load() {
     // switch off setupMode
     switchSetupMode();
     
-    processGame();
+    // processGame();
 }
 
 /* Helper method for load method: rewrite playerX, playerY */
@@ -254,7 +254,7 @@ private void rewritePlayerLocation() {
 private void move(String input) {
     if (NORTH.equals(input)) {
         if (world[playerX][playerY + 1].equals(Tileset.LOCKED_DOOR)) {
-            gameSuccess();
+            // gameSuccess();
         }
         if (world[playerX][playerY + 1].equals(Tileset.FLOOR)) {
             world[playerX][playerY + 1] = Tileset.PLAYER;
@@ -264,7 +264,7 @@ private void move(String input) {
         
     } else if (EAST.equals(input)) {
         if (world[playerX + 1][playerY].equals(Tileset.LOCKED_DOOR)) {
-            gameSuccess();
+            // gameSuccess();
         }
         if (world[playerX + 1][playerY].equals(Tileset.FLOOR)) {
             world[playerX + 1][playerY] = Tileset.PLAYER;
@@ -274,7 +274,7 @@ private void move(String input) {
         
     } else if (SOUTH.equals(input)) {
         if (world[playerX][playerY - 1].equals(Tileset.LOCKED_DOOR)) {
-            gameSuccess();
+            // gameSuccess();
         }
         if (world[playerX][playerY - 1].equals(Tileset.FLOOR)) {
             world[playerX][playerY - 1] = Tileset.PLAYER;
@@ -284,7 +284,7 @@ private void move(String input) {
  
     } else if (WEST.equals(input)) {
         if (world[playerX - 1][playerY].equals(Tileset.LOCKED_DOOR)) {
-            gameSuccess();
+            // gameSuccess();
         }
         if (world[playerX - 1][playerY].equals(Tileset.FLOOR)) {
             world[playerX - 1][playerY] = Tileset.PLAYER;
@@ -294,7 +294,7 @@ private void move(String input) {
     }
 }
 
-/* Quits game if entering the door. */
+/* Quits game if entering the door.
 private void gameSuccess() {
     // prepare welcome board window
     StdDraw.enableDoubleBuffering();
@@ -344,7 +344,7 @@ private void renderEndGameBoard() {
     StdDraw.show();
     StdDraw.pause(100);
 }
-
+*/
 /* Quits game saving a current game */
 private void saveAndQuit() {
     // ignore if quit flag : hasn't been inputted in advance
@@ -391,7 +391,7 @@ private void saveAndQuit() {
     }
 }
 
-/* Process keyboard inputs in setupMode */
+/* Process keyboard inputs in setupMode
 private void processWelcome() {
     // prepare welcome board window
     StdDraw.enableDoubleBuffering();
@@ -413,7 +413,8 @@ private void processWelcome() {
     
     processGame();
 }
-/* Renders welcome board in setupMode */
+*/
+/* Renders welcome board in setupMode
 private void renderWelcomeBoard() {
     StdDraw.clear(StdDraw.BLACK);
     StdDraw.setPenColor(StdDraw.WHITE);
@@ -437,8 +438,8 @@ private void renderWelcomeBoard() {
     StdDraw.show();
     StdDraw.pause(100);
 }
-
-/* Process keyboard inputs in game mode */
+*/
+/* Process keyboard inputs in game mode
 private void processGame() {
     ter.initialize(WIDTH, HEIGHT);
     while (true) {
@@ -451,8 +452,8 @@ private void processGame() {
         renderGame();
     }
 }
-
-/* Renders the current state of the game */
+*/
+/* Renders the current state of the game
 private void renderGame() {
     renderWorld();
     showTileOnHover();
@@ -461,7 +462,7 @@ private void renderGame() {
     }
 }
 
-/* Renders world */
+/* Renders world
 private void renderWorld() {
     if (!inPutStringMode) {
         StdDraw.setFont();
@@ -469,8 +470,8 @@ private void renderWorld() {
     }
     ter.renderFrame(world);
 }
-
-/* Draws text describing the Tile currently under the mouse pointer */
+*/
+/* Draws text describing the Tile currently under the mouse pointer
 private void showTileOnHover() {
     // turn the position of mouse pointer into xy-coordinate
     int mouseX = (int) StdDraw.mouseX();
@@ -489,16 +490,16 @@ private void showTileOnHover() {
     StdDraw.textLeft(1, HEIGHT - 1, mouseTile.description());
     StdDraw.show();
 }
-
+*/
 /// Public methods
 
 /**
  * Method used for playing a fresh game. The game should start from the main menu. */
- 
+ /*
 public void playWithKeyboard() {
     processWelcome();
 }
-
+*/
 /**
  * Method used for autograding and testing the game code. The input string will be a series
  * of characters (for example, "n123sswwdasdassadwas", "n123sss:q", "lwww". The game should
