@@ -174,12 +174,6 @@ private void setupNewGame() {
     switchSetupMode();
     endMode = false;
     
-    for (int i = 0; i < WIDTH; i++) {
-        for (int j = 0; j < HEIGHT; j++) {
-            System.out.println(world[i][j]);
-        }
-    }
-    
     if (inPutStringMode) {
         ter.initialize(WIDTH, HEIGHT);
         ter.renderFrame(world);
