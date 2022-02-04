@@ -8,6 +8,8 @@ private static int range;
 private PercolationFactory pf;
 private static double mean;
 private static double stddev;
+private double confidenceLow;
+private double confidenceHigh;
 private double[] xList;
 public PercolationStats(int N, int T, PercolationFactory pf) {
 	if (N <= 0 || T <= 0) {
@@ -31,19 +33,45 @@ public PercolationStats(int N, int T, PercolationFactory pf) {
 		xList[check++] = (double) test.numberOfOpenSites() / (range * range);
 		T--;
 		}
-	}
-public double mean() {
 	mean = StdStats.mean(xList);
+	stddev = StdStats.stddev(xList);
+	confidenceLow = mean - 1.96 * stddev / Math.sqrt((double) times);
+	confidenceHigh = mean + 1.96 * stddev / Math.sqrt((double) times);
+}
+public double mean() {
+	
 	return mean;
 }
 public double stddev() {
-	stddev = StdStats.stddev(xList);
+	
 	return stddev;
 }
 public double confidenceLow() {
-	return mean - 1.96 * stddev / Math.sqrt((double) times);
+	return confidenceLow;
 }
 public double confidenceHigh() {
-	return mean + 1.96 * stddev / Math.sqrt((double) times);
+	return confidenceHigh;
+}
+public static void main(String[] args) {
+	PercolationStats ps = new PercolationStats(20, 10, new PercolationFactory());
+	System.out.println(ps.mean());
+	System.out.println(ps.mean());
+	System.out.println(ps.confidenceHigh());
+	System.out.println(ps.confidenceHigh());
+	System.out.println(ps.confidenceLow());
+	System.out.println(ps.confidenceLow());
+	System.out.println(ps.mean());
+	System.out.println(ps.mean());
+	System.out.println(ps.confidenceLow());
+	System.out.println(ps.confidenceLow());
+	System.out.println(ps.confidenceHigh());
+	System.out.println(ps.confidenceLow());
+	System.out.println(ps.confidenceLow());
+	System.out.println(ps.confidenceHigh());
+	System.out.println(ps.confidenceLow());
+	System.out.println(ps.stddev());
+	System.out.println(ps.stddev());
+	System.out.println(ps.confidenceHigh());
+	System.out.println("confidence:[" + ps.confidenceLow() + "," + ps.confidenceHigh() + "]");
 }
 }

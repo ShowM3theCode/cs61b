@@ -100,4 +100,8 @@ public int numberOfOpenSites() {
 public boolean percolates() {
 	return _WQUUF.connected(topNode, bottomNode);
 }
+public static void main(String[] args) {
+	Percolation p = new Percolation(10);
+	p.open(0, 4);
+}
 }
