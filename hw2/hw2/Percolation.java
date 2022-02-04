@@ -12,6 +12,7 @@ private final String OPEN = "open";
 private int topNode = 0;
 private int bottomNode;
 private int numberOfOpenSites;
+
 /* Create N-by-N grid, with all sites initially blocked. */
 public Percolation(int N) {
 	if (N <= 0) {
@@ -29,6 +30,7 @@ public Percolation(int N) {
 		}
 	}
 }
+
 public void open(int row, int col) {
 	validateXY(row, col);
 	if (grid[row][col].equals(BLOCK)) {
@@ -46,11 +48,12 @@ public void open(int row, int col) {
 		_WQUUF.union(topNode, xyTo1d(row, col));
 		_WQUUFNoBottom.union(topNode, xyTo1d(row, col));
 	}
-	if (row == range  - 1) {
+	if (row == range - 1) {
 		_WQUUF.union(bottomNode, xyTo1d(row, col));
 	}
 	unionOthers(row, col);
 }
+
 private void unionOthers(int row, int col) {
 	if (row + 1 < range && isOpen(row + 1, col)) {
 		_WQUUF.union(xyTo1d(row, col), xyTo1d(row + 1, col));
@@ -69,31 +72,32 @@ private void unionOthers(int row, int col) {
 		_WQUUFNoBottom.union(xyTo1d(row, col), xyTo1d(row, col - 1));
 	}
 }
+
 private int xyTo1d(int x, int y) {
 	return x * range + y + 1;
 }
+
 public boolean isOpen(int x, int y) {
 	validateXY(x, y);
 	return grid[x][y].equals(OPEN);
 }
+
 public boolean isFull(int row, int col) {
 	validateXY(row, col);
 	return _WQUUFNoBottom.connected(xyTo1d(row, col), topNode);
 }
+
 private void validateXY(int row, int col) {
 	if (row >= range || col >= range || row < 0 || col < 0) {
 		throw new IndexOutOfBoundsException();
 	}
 }
+
 public int numberOfOpenSites() {
 	return numberOfOpenSites;
 }
+
 public boolean percolates() {
 	return _WQUUF.connected(topNode, bottomNode);
-}
-public static void main(String[] args) {
-	Percolation perc = new Percolation(1);
-	perc.open(0, 0);
-	System.out.println(perc.percolates());
 }
 }

@@ -8,12 +8,15 @@ private static int range;
 private PercolationFactory pf;
 private static double mean;
 private static double stddev;
-private int[] x;
+private double[] xList;
 public PercolationStats(int N, int T, PercolationFactory pf) {
+	if (N <= 0 || T <= 0) {
+		throw new IllegalArgumentException();
+	}
 	times = T;
 	range = N;
 	this.pf = pf;
-	x = new int[times];
+	xList = new double[times];
 	int check = 0;
 	while (T != 0) {
 		Percolation test = pf.make(range);
@@ -21,18 +24,20 @@ public PercolationStats(int N, int T, PercolationFactory pf) {
 		while (!test.percolates()) {
 			randomRow = StdRandom.uniform(range);
 			randomCol = StdRandom.uniform(range);
-			test.open(randomRow, randomCol);
+			if (!test.isOpen(randomRow, randomCol)) {
+				test.open(randomRow, randomCol);
+			}
 		}
-		x[check++] = test.numberOfOpenSites();
+		xList[check++] = (double) test.numberOfOpenSites() / (range * range);
 		T--;
 		}
 	}
 public double mean() {
-	mean = StdStats.mean(x);
+	mean = StdStats.mean(xList);
 	return mean;
 }
 public double stddev() {
-	stddev = StdStats.stddev(x);
+	stddev = StdStats.stddev(xList);
 	return stddev;
 }
 public double confidenceLow() {
@@ -40,11 +45,5 @@ public double confidenceLow() {
 }
 public double confidenceHigh() {
 	return mean + 1.96 * stddev / Math.sqrt((double) times);
-}
-public static void main(String[] args) {
-	PercolationStats ps = new PercolationStats(10, 100, new PercolationFactory());
-	System.out.println(ps.mean());
-	System.out.println(ps.stddev());
-	System.out.println("confidence:[" + ps.confidenceLow() + "," + ps.confidenceHigh() + "]");
 }
 }
