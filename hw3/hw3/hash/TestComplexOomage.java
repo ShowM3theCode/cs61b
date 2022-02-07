@@ -57,7 +57,7 @@ public class TestComplexOomage {
             params.add(0);
         }
         deadlyList.add(new ComplexOomage(params));
-        assertEquals(deadlyList.get(0).hashCode(), deadlyList.get(1).hashCode());
+        assertNotEquals(deadlyList.get(0).hashCode(), deadlyList.get(1).hashCode());
     }
 
     /** Calls tests for SimpleOomage. */
