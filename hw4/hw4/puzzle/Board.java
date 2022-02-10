@@ -2,7 +2,6 @@ package hw4.puzzle;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 public class Board implements WorldState {
@@ -49,7 +48,7 @@ public class Board implements WorldState {
 				}
 			}
 		}
-		Set<WorldState> neighbs = new HashSet<>();
+		ArrayList<WorldState> neighbs = new ArrayList<>();
 		if (isInBound(posX0, posY0 + 1)) {
 			neighbs.add(createNeighbors(test, posX0, posY0, 0));
 		}
@@ -160,18 +159,34 @@ public class Board implements WorldState {
 	
 	@Override
 	public boolean equals(Object y) {
-		Board yBoard = (Board) y;
+		if (y == null) {
+			return false;
+		}
+		if (y == this) {
+			return true;
+		}
+		Board yBoard;
+		if (y instanceof Board) {
+			yBoard = (Board) y;
+		}
+		else {
+			return false;
+		}
+		if (size != yBoard.size()) {
+			return false;
+		}
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
-				if (tiles[i][j] == yBoard.tiles[i][j]) {
-					continue;
-				}
-				else {
+				if (!(tiles[i][j] == yBoard.tiles[i][j])) {
 					return false;
 				}
 			}
 		}
 		return true;
+	}
+	@Override
+	public int hashCode() {
+		return 0;
 	}
 	
     /** Returns the string representation of the board. 
