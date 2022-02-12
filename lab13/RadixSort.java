@@ -17,7 +17,23 @@ public class RadixSort {
      */
     public static String[] sort(String[] asciis) {
         // TODO: Implement LSD Sort
-        return null;
+        String[] sorted = new String[asciis.length];
+        // find max
+        String max = "";
+        int check = 0;
+        for (String i: asciis) {
+            max = max.compareTo(i) >= 0 ? max : i;
+            sorted[check++] = i;
+        }
+    
+        // record the the length of the longest string
+        int counts = max.length();
+        
+        
+        while (counts-- != 0) {
+            sortHelperLSD(sorted, counts);
+        }
+        return sorted;
     }
 
     /**
@@ -26,9 +42,37 @@ public class RadixSort {
      * @param asciis Input array of Strings
      * @param index The position to sort the Strings on.
      */
+    private final static int RANGE = 256;
     private static void sortHelperLSD(String[] asciis, int index) {
         // Optional LSD helper method for required LSD radix sort
-        return;
+    
+        // gather all the counts for each value
+        int[] counts = new int[RANGE];
+        for (String i : asciis) {
+            if (i.length() - 1 < index) {
+                counts[0]++;
+            }
+            else {
+                counts[(int) i.charAt(index)]++;
+            }
+        }
+        
+        // however, below is a more proper, generalized implementation of
+        // counting sort that uses start position calculation
+        int[] starts = new int[RANGE];
+        int pos = 0;
+        for (int i = 0; i < starts.length; i += 1) {
+            starts[i] = pos;
+            pos += counts[i];
+        }
+        String[] unsorted = new String[asciis.length];
+        System.arraycopy(asciis, 0, unsorted, 0, asciis.length);
+        for (int i = 0; i < asciis.length; i += 1) {
+            char item = unsorted[i].length() - 1 < index ? 0 : unsorted[i].charAt(index);
+            int place = starts[(int) item];
+            asciis[place] = unsorted[i];
+            starts[(int) item] += 1;
+        }
     }
 
     /**

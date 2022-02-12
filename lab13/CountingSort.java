@@ -65,8 +65,48 @@ public class CountingSort {
      *
      * @param arr int array that will be sorted
      */
+    private final static int twoBillion = 2000000000;
     public static int[] betterCountingSort(int[] arr) {
         // TODO make counting sort work with arrays containing negative numbers.
-        return null;
+        // find max and create new array
+        // that transforms the negative numbers.
+        int max = Integer.MIN_VALUE;
+        int maxer = twoBillion;
+        int checkNum;
+        for (int i : arr) {
+            if (i < 0) {
+                checkNum = twoBillion - i;
+                maxer = maxer > checkNum ? maxer : checkNum;
+            }
+            max = max > i ? max : i;
+        }
+    
+        // change the new zero subscript
+        int newZero = maxer - twoBillion;
+        // gather all the counts for each value
+        int[] counts = new int[max + 1 + newZero];
+        for (int i : arr) {
+            counts[i + newZero]++;
+        }
+    
+        // however, below is a more proper, generalized implementation of
+        // counting sort that uses start position calculation
+        int[] starts = new int[max + 1 + newZero];
+        int pos = 0;
+        for (int i = 0; i < starts.length; i += 1) {
+            starts[i] = pos;
+            pos += counts[i];
+        }
+    
+        int[] sorted2 = new int[arr.length];
+        for (int i = 0; i < arr.length; i += 1) {
+            int item = arr[i];
+            int place = starts[item + newZero];
+            sorted2[place] = item;
+            starts[item + newZero] += 1;
+        }
+    
+        // return the sorted array
+        return sorted2;
     }
 }
