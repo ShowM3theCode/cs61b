@@ -29,7 +29,7 @@ public class Router {
         // 1. get the start node and the end node.
         long startId = g.closest(stlon, stlat);
         long endId = g.closest(destlon, destlat);
-        SearchNode curNode = new SearchNode(startId, 0, null, endId, g);
+        SearchNode curNode = new SearchNode(startId, endId, g);
         PriorityQueue<SearchNode> minPQ = new PriorityQueue<>();
         HashSet<Long> marked = new HashSet<>();
         List<Long> answer;
@@ -46,24 +46,26 @@ public class Router {
                 // push it into the minPQ
                 // question: whether to compare its distance?
                 // question: mark can lead a problem or not?
-                if (!marked.contains(tmp)) {
-                    marked.add(tmp);
+                 if (!marked.contains(tmp)) {
+                    // marked.add(tmp);
                     SearchNode tmpNode = new SearchNode(tmp, curNode.getDistance(), curNode);
                     minPQ.add(tmpNode);
-                }
+                 }
             }
             // poll from the minPQ and repeat the operation
             curNode = minPQ.poll();
+            marked.add(curNode.getId());
         }
         answer = getListOfPath(curNode);
         return answer; // FIXME
     }
     
     private static List<Long> getListOfPath(SearchNode curNode) {
+        SearchNode tmp = curNode;
         List<Long> answer = new ArrayList<>();
-        while (curNode != null) {
-            answer.add(curNode.getId());
-            curNode = curNode.getPrevious();
+        while (tmp != null) {
+            answer.add(tmp.getId());
+            tmp = tmp.getPrevious();
         }
         Collections.reverse(answer);
         return answer;

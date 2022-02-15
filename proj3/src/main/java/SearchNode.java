@@ -6,10 +6,10 @@ public class SearchNode implements Comparable<SearchNode> {
 	private static long endId;
 	private static GraphDB g;
 	// initial node
-	public SearchNode(long id, double distance, SearchNode previous, long endId, GraphDB g) {
+	public SearchNode(long id, long endId, GraphDB g) {
 		this.id = id;
-		this.distance = distance;
-		this.previous = previous;
+		this.distance = 0;
+		this.previous = null;
 		this.endId = endId;
 		this.priority = Long.MAX_VALUE;
 		this.g = g;
@@ -18,7 +18,7 @@ public class SearchNode implements Comparable<SearchNode> {
 		this.id = id;
 		this.distance = distance + g.distance(id, previous.id);
 		this.previous = previous;
-		this.priority = distance + g.distance(id, endId);
+		this.priority = this.distance + g.distance(id, endId);
 	}
 	public long getId() {
 		return id;
@@ -31,6 +31,6 @@ public class SearchNode implements Comparable<SearchNode> {
 	}
 	@Override
 	public int compareTo(SearchNode o) {
-		return (int) ((this.priority - o.priority) * 1000000);
+		return (int) ((this.priority - o.priority) * 10000000);
 	}
 }
