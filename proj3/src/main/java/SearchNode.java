@@ -31,6 +31,12 @@ public class SearchNode implements Comparable<SearchNode> {
 	}
 	@Override
 	public int compareTo(SearchNode o) {
-		return (int) ((this.priority - o.priority) * 10000000);
+		if (this.priority == o.priority) {
+			return 0;
+		}
+		if (this.priority > o.priority) {
+			return 1;
+		}
+		return -1;
 	}
 }

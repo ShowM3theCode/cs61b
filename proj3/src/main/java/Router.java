@@ -32,7 +32,6 @@ public class Router {
         SearchNode curNode = new SearchNode(startId, endId, g);
         PriorityQueue<SearchNode> minPQ = new PriorityQueue<>();
         HashSet<Long> marked = new HashSet<>();
-        List<Long> answer;
         // mark start node.
         marked.add(startId);
         // 2. if the current node == end node, end and return the answer.
@@ -53,11 +52,14 @@ public class Router {
                  }
             }
             // poll from the minPQ and repeat the operation
+            if (minPQ.isEmpty()) {
+                break;
+                // throw new IllegalArgumentException("minPQ is empty!");
+            }
             curNode = minPQ.poll();
             marked.add(curNode.getId());
         }
-        answer = getListOfPath(curNode);
-        return answer; // FIXME
+        return getListOfPath(curNode); // FIXME
     }
     
     private static List<Long> getListOfPath(SearchNode curNode) {
