@@ -7,6 +7,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * Graph for storing all of the intersection (vertex) and road (edge) information.
@@ -20,7 +22,41 @@ import java.util.ArrayList;
 public class GraphDB {
     /** Your instance variables for storing the graph. You should consider
      * creating helper classes, e.g. Node, Edge, etc. */
-
+    private class Node {
+        // version 1.0, seems still need to addi something or not?
+        // private long id;
+        private String name;
+        private double lon;
+        private double lat;
+        ArrayList<Long> adjacentTo;
+    
+        private Node(double lon, double lat) {
+            this.lon = lon;
+            this.lat = lat;
+            this.adjacentTo = new ArrayList<>();
+            name = null;
+        }
+    }
+    // store all the information of nodes
+    public HashMap<Long, Node> vertex = new HashMap<>();
+    public HashSet<Long> idList = new HashSet<>();
+    
+    // the method provided for receiving datas in the handler.
+    public void addNode(long id, double lon, double lat) {
+        Node node = new Node(lon, lat);
+        idList.add(id);
+        vertex.put(id, node);
+    }
+    
+    public void addName(long id, String name) {
+        vertex.get(id).name = name;
+    }
+    
+    public void addEdge(long id1, long id2) {
+        vertex.get(id1).adjacentTo.add(id2);
+        vertex.get(id2).adjacentTo.add(id1);
+    }
+    
     /**
      * Example constructor shows how to create and start an XML parser.
      * You do not need to modify this constructor, but you're welcome to do so.
@@ -42,6 +78,11 @@ public class GraphDB {
         clean();
     }
 
+    // TODO: how to design the data structure to save nodes and way?
+    // naive thinking : a class for nodes, and adjacent to ways.
+    // question is : how to save the information of ways?
+    // like the name of ways or something.
+    
     /**
      * Helper to process strings into their "cleaned" form, ignoring punctuation and capitalization.
      * @param s Input string.
@@ -58,6 +99,36 @@ public class GraphDB {
      */
     private void clean() {
         // TODO: Your code here.
+        HashSet<Long> idRemoveList = new HashSet<>();
+        for (long id : idList) {
+            if (vertex.get(id).adjacentTo.isEmpty()) {
+                vertex.remove(id);
+                idRemoveList.add(id);
+            }
+        }
+        for (long id : idRemoveList) {
+            idList.remove(id);
+        }
+        /*
+        ArrayList<Integer> idForRemove = new ArrayList<>();
+        for (int i = 0; i < idList.size(); i++) {
+            if (vertex.get(idList.).adjacentTo.isEmpty()) {
+                vertex.remove(idList.get(i));
+                idForRemove.add(i);
+            }
+        }
+        for (int id : idForRemove) {
+            idList.remove(id);
+        }
+        */
+        /*
+        for (long tmp : idList) {
+            if (vertex.get(tmp).adjacentTo.isEmpty()) {
+                vertex.remove(tmp);
+                idList.remove(tmp);
+            }
+        }
+        */
     }
 
     /**
@@ -66,7 +137,7 @@ public class GraphDB {
      */
     Iterable<Long> vertices() {
         //YOUR CODE HERE, this currently returns only an empty list.
-        return new ArrayList<Long>();
+        return idList;
     }
 
     /**
@@ -75,7 +146,7 @@ public class GraphDB {
      * @return An iterable of the ids of the neighbors of v.
      */
     Iterable<Long> adjacent(long v) {
-        return null;
+        return vertex.get(v).adjacentTo;
     }
 
     /**
@@ -136,16 +207,30 @@ public class GraphDB {
      * @return The id of the node in the graph closest to the target.
      */
     long closest(double lon, double lat) {
-        return 0;
+        /*
+        if (idList.isEmpty() || vertex.isEmpty()) {
+            throw new IllegalArgumentException("the graph is empty!");
+        }
+        */
+        double minDistance = Double.MAX_VALUE;
+        long minID = 0;
+        double tmpDistance;
+        for (long id : idList) {
+            tmpDistance = distance(vertex.get(id).lon, vertex.get(id).lat, lon, lat);
+            if (tmpDistance < minDistance) {
+                minID = id;
+                minDistance = tmpDistance;
+            }
+        }
+        return minID;
     }
-
     /**
      * Gets the longitude of a vertex.
      * @param v The id of the vertex.
      * @return The longitude of the vertex.
      */
     double lon(long v) {
-        return 0;
+        return vertex.get(v).lon;
     }
 
     /**
@@ -154,6 +239,6 @@ public class GraphDB {
      * @return The latitude of the vertex.
      */
     double lat(long v) {
-        return 0;
+        return vertex.get(v).lat;
     }
 }

@@ -41,12 +41,12 @@ public class Rasterer {
      * "query_success" : Boolean, whether the query was able to successfully complete; don't
      *                    forget to set this to true on success! <br>
      */
-    private static final double bound_ullon = -122.2998046875;
-    private static final double bound_ullat = 37.892195547244356;
-    private static final double bound_lrlon = -122.2119140625;
-    private static final double bound_lrlat = 37.82280243352756;
-    private static final double WIDTH = bound_lrlon - bound_ullon;
-    private static final double HEIGHT = bound_ullat - bound_lrlat;
+    private static final double BOUNDULLON = -122.2998046875;
+    private static final double BOUNDULLAT = 37.892195547244356;
+    private static final double BOUNDLRLON = -122.2119140625;
+    private static final double BOUNDLRLAT = 37.82280243352756;
+    private static final double WIDTH = BOUNDLRLON - BOUNDULLON;
+    private static final double HEIGHT = BOUNDULLAT - BOUNDLRLAT;
     public Map<String, Object> getMapRaster(Map<String, Double> params) {
         System.out.println(params);
         Map<String, Object> results = new HashMap<>();
@@ -97,10 +97,10 @@ public class Rasterer {
          * 3. x (y) % distance = subscript of the corresponding image
          * while for lower right , it will be x (y) % distance + 1
         */
-        double x_ul = params.get("ullon") - bound_ullon;
-        double y_ul = bound_ullat - params.get("ullat");
-        double x_lr = params.get("lrlon") - bound_ullon;
-        double y_lr = bound_ullat - params.get("lrlat");
+        double x_ul = params.get("ullon") - BOUNDULLON;
+        double y_ul = BOUNDULLAT - params.get("ullat");
+        double x_lr = params.get("lrlon") - BOUNDULLON;
+        double y_lr = BOUNDULLAT - params.get("lrlat");
         double singleDistance_w = WIDTH / Math.pow(2, depth);
         double singleDistance_h = HEIGHT / Math.pow(2, depth);
         int subscript_ul_x = countSubscript(x_ul, singleDistance_w, (int) Math.pow(2, depth) - 1);
@@ -132,10 +132,10 @@ public class Rasterer {
         System.out.println(render_grid[2][2].equals("d7_x86_y30.png"));
         */
         // 6. get the four spots.
-        raster_ul_lon = bound_ullon + singleDistance_w * subscript_ul_x;
-        raster_ul_lat = bound_ullat - singleDistance_h * subscript_ul_y;
-        raster_lr_lon = bound_ullon + singleDistance_w * subscript_lr_x;
-        raster_lr_lat = bound_ullat - singleDistance_h * subscript_lr_y;
+        raster_ul_lon = BOUNDULLON + singleDistance_w * subscript_ul_x;
+        raster_ul_lat = BOUNDULLAT - singleDistance_h * subscript_ul_y;
+        raster_lr_lon = BOUNDULLON + singleDistance_w * subscript_lr_x;
+        raster_lr_lat = BOUNDULLAT - singleDistance_h * subscript_lr_y;
         /*
         System.out.println(raster_ul_lon == -122.24212646484375);
         System.out.println(raster_lr_lon == -122.24006652832031);
