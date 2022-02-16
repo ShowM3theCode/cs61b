@@ -26,6 +26,7 @@ public class GraphDB {
         // version 1.0, seems still need to addi something or not?
         // private long id;
         private String name;
+        private String wayName;
         private double lon;
         private double lat;
         ArrayList<Long> adjacentTo;
@@ -34,7 +35,8 @@ public class GraphDB {
             this.lon = lon;
             this.lat = lat;
             this.adjacentTo = new ArrayList<>();
-            name = null;
+            name = "";
+            wayName = "unknown road";
         }
     }
     // store all the information of nodes
@@ -56,7 +58,14 @@ public class GraphDB {
         vertex.get(id1).adjacentTo.add(id2);
         vertex.get(id2).adjacentTo.add(id1);
     }
+
+    public void addWayName(long id, String wayName) {
+        vertex.get(id).wayName = wayName;
+    }
     
+    public String getWayName(long id) {
+        return vertex.get(id).wayName;
+    }
     /**
      * Example constructor shows how to create and start an XML parser.
      * You do not need to modify this constructor, but you're welcome to do so.

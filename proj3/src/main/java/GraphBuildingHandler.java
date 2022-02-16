@@ -52,6 +52,7 @@ public class GraphBuildingHandler extends DefaultHandler {
     private LinkedList<Long> idList = new LinkedList<>();
     private long lastId = 0;
     private boolean isHighWay = false;
+    private String wayName = "";
     /**
      * Called at the beginning of an element. Typically, you will want to handle each element in
      * here, and you may want to track the parent element.
@@ -90,6 +91,7 @@ public class GraphBuildingHandler extends DefaultHandler {
             // System.out.println("Beginning a way...");
             
             idList.clear();
+            wayName = "";
             lastId = 0;
         } else if (activeState.equals("way") && qName.equals("nd")) {
             /* While looking at a way, we found a <nd...> tag. */
@@ -121,6 +123,7 @@ public class GraphBuildingHandler extends DefaultHandler {
                 /* Hint: Setting a "flag" is good enough! */
             } else if (k.equals("name")) {
                 //System.out.println("Way Name: " + v);
+                wayName = v;
             }
 //            System.out.println("Tag with k=" + k + ", v=" + v + ".");
         } else if (activeState.equals("node") && qName.equals("tag") && attributes.getValue("k")
@@ -155,6 +158,9 @@ public class GraphBuildingHandler extends DefaultHandler {
             if (isHighWay) {
                 for (int i = 0; i < idList.size() - 1; i++) {
                     g.addEdge(idList.get(i), idList.get(i + 1));
+                }
+                for (int i = 0; i < idList.size(); i++) {
+                    g.addWayName(idList.get(i), wayName);
                 }
                 isHighWay = false;
             }

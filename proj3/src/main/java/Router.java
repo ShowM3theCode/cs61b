@@ -82,10 +82,231 @@ public class Router {
      * route.
      */
     public static List<NavigationDirection> routeDirections(GraphDB g, List<Long> route) {
-        return null; // FIXME
+        // basic thought:
+        // iterate the nodes, and compute 3 values,
+        // distance, degree, name of ways
+        // 1. make the node is in a way
+        // which needs to modify the node
+        // (done in the GraphDB)
+        List<NavigationDirection> answer = new ArrayList<>();
+        // (once produce a ND)
+        // get the start point, end point, turning point
+        // the turning point is the next start point
+        // compute the distance by start point and end point
+        // keep the degree by end point and the turning point using for next ND
+        boolean isStarted = true;
+        boolean isEnded = false;
+        int leapNum = 0;
+        long previousStartID = 0;
+        for (int i = 0; i < route.size(); i++) {
+            if (i == route.size() - 1) {
+                break;
+            }
+            if (isEnded) {
+                break;
+            }
+            // System.out.println(leapNum);
+            if (i < leapNum) {
+                continue;
+            }
+            NavigationDirection navigationDirection = new NavigationDirection();
+            if (isStarted) {
+                isStarted = false;
+                long startID = route.get(i);
+                previousStartID = startID;
+                long endID = route.get(i);
+                for (int j = i + 1; j < route.size(); j++) {
+                    if (g.getWayName(startID).equals(g.getWayName(route.get(j)))) {
+                        endID = route.get(j);
+                    }
+                    else {
+                        leapNum = j - 1;
+                        break;
+                    }
+                }
+                if (leapNum == 0) {
+                    isEnded = true;
+                }
+                // bug: if endID and turningID is not valued?
+                navigationDirection.way = g.getWayName(startID);
+                navigationDirection.distance = g.distance(startID, endID);
+                navigationDirection.direction = 0;
+                answer.add(navigationDirection);
+                System.out.println(i);
+                System.out.println("startID.way : " + g.getWayName(startID));
+                System.out.println("endID.way : " + g.getWayName(endID));
+                System.out.println("leapNum : " + leapNum);
+            }
+            else {
+                long turningID = route.get(i);
+                long startID = route.get(i + 1);
+                long endID = route.get(i + 1);
+                for (int j = i + 2; j < route.size(); j++) {
+                    if (g.getWayName(startID).equals(g.getWayName(route.get(j)))) {
+                        endID = route.get(j);
+                    }
+                    else {
+                        // not working???
+                        leapNum = j - 1;
+                        // System.out.println("leapNum update : " + leapNum);
+                        break;
+                    }
+                }
+                if (leapNum == i) {
+                    isEnded = true;
+                }
+                navigationDirection.distance = g.distance(startID, endID);
+                navigationDirection.way = g.getWayName(startID);
+                navigationDirection.direction = modifyDirection(g, startID, endID,
+                        previousStartID, turningID);
+                previousStartID = startID;
+                if (navigationDirection.direction <= 0.001) {
+                    continue;
+                }
+                // System.out.println(i);
+                // System.out.println("startID.way : " + g.getWayName(startID));
+                // System.out.println("endID.way : " + g.getWayName(endID));
+                // System.out.println("turningID.way : " + g.getWayName(turningID));
+                answer.add(navigationDirection);
+            }
+            
+        }
+        
+        /*
+        NavigationDirection curND = null;
+        String curWayName = "";
+        List<NavigationDirection> answer = new ArrayList<>();
+        // to compute the distance
+        long startID = 0;
+        // to compute the degree
+        long formerID = 0;
+        // make sure that the first time is start
+        boolean isStart = true;
+        for (int i = 0; i < route.size(); i++) {
+            long curID = route.get(i);
+            if (!g.getWayName(curID).equals(curWayName)) {
+                if (curND != null) {
+                    curND.distance = g.distance(startID, formerID);
+                    if (isStart) {
+                        curND.way = g.getWayName(formerID);
+                    }
+                    else {
+                        curND.way = g.getWayName(curID);
+                    }
+                    curND.direction = modifyDirection(g, formerID, curID, isStart);
+                    if (isStart) {
+                        isStart = false;
+                    }
+                    // copy the NavigationDirection and add to the answer
+                    // (not sure if it is working or not?)
+                    NavigationDirection tmp = new NavigationDirection();
+                    tmp.distance = curND.direction;
+                    tmp.way = String.valueOf(curND.way);
+                    tmp.direction = curND.direction;
+                    answer.add(tmp);
+    
+                    curND = new NavigationDirection();
+                }
+                else {
+                    curND = new NavigationDirection();
+                }
+                curWayName = g.getWayName(curID);
+                startID = curID;
+            }
+            // 3. compute the distance
+            // (it seems not hard)
+    
+            // record the formerID
+            formerID = curID;
+        }
+        */
+        /*
+        for (Long curID : route) {
+            if (!g.getWayName(curID).equals(curWayName)) {
+                if (curND != null) {
+                    curND.distance = g.distance(startID, formerID);
+                    // 2. modify the degree
+                    // the first time is start, and the rest occurs when the road
+                    // is changed
+                    curND.way = g.getWayName(formerID);
+                    curND.direction = modifyDirection(g, formerID, curID, isStart);
+                    if (isStart) {
+                        isStart = false;
+                    }
+                    // copy the NavigationDirection and add to the answer
+                    // (not sure if it is working or not?)
+                    NavigationDirection tmp = new NavigationDirection();
+                    tmp.distance = curND.direction;
+                    tmp.way = String.valueOf(curND.way);
+                    tmp.direction = curND.direction;
+                    answer.add(tmp);
+                    
+                    curND = new NavigationDirection();
+                }
+                else {
+                    curND = new NavigationDirection();
+                }
+                curWayName = g.getWayName(curID);
+                startID = curID;
+            }
+            // 3. compute the distance
+            // (it seems not hard)
+            
+            // record the formerID
+            formerID = curID;
+        }
+        */
+        return answer; // FIXME
     }
-
-
+    /*
+    private static List<NavigationDirection> addToAnswer(List<NavigationDirection> answer, NavigationDirection curND) {
+        NavigationDirection tmp = new NavigationDirection();
+        tmp.distance = curND.direction;
+        tmp.way = String.valueOf(curND.way);
+        tmp.direction = curND.direction;
+        answer.add(tmp);
+        return answer;
+    }
+    */
+    private static int modifyDirection(GraphDB g, long startID, long endID,
+                                       long previousStartID, long turningID) {
+        int answer;
+        double bearing1 = g.bearing(startID, endID);
+        double bearing2 = g.bearing(previousStartID, turningID);
+        double bearing = bearing1 - bearing2;
+        if (bearing >= 180) {
+            bearing -= 360;
+        }
+        else if (bearing <= -180) {
+            bearing += 360;
+        }
+        System.out.println("bearing1 : " + bearing1);
+        System.out.println("bearing2 : " + bearing2);
+        System.out.println("bearing : " + bearing);
+        if (Math.abs(bearing) <= 15) {
+            answer = 1;
+        }
+        else if (bearing < -15 && bearing >= -30) {
+            answer = 2;
+        }
+        else if (bearing > 15 && bearing <= 30) {
+            answer = 3;
+        }
+        else if (bearing > 30 && bearing <= 100) {
+            answer = 4;
+        }
+        else if (bearing < -30 && bearing >= -100) {
+            answer = 5;
+        }
+        else if (bearing < -100) {
+            answer = 6;
+        }
+        else {
+            answer = 7;
+        }
+        return answer;
+    }
+    
     /**
      * Class to represent a navigation direction, which consists of 3 attributes:
      * a direction to go, a way, and the distance to travel for.
