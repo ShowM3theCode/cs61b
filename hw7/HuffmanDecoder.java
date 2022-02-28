@@ -10,14 +10,17 @@ public class HuffmanDecoder {
 		BinaryTrie trie = (BinaryTrie) x;
 		BitSequence bitSequence = (BitSequence) y;
 		
-		List<Character> list = new ArrayList<>();
+		List<char> list = new ArrayList();
 		while (bitSequence.length() > 0) {
 			Match tmp = trie.longestPrefixMatch(bitSequence);
 			list.add(tmp.getSymbol());
 			bitSequence = bitSequence.allButFirstNBits(tmp.getSequence().length());
 		}
 		
-		Character[] chars = list.toArray(new Character[list.size()]);
+		char[] chars = new char[list.size()];
+		for (int i = 0; i < list.size(); i++) {
+			chars[i] = list.get(i);
+		}
 		FileUtils.writeCharArray(args[1], chars);
 	}
 }
