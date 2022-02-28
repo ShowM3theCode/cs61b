@@ -16,7 +16,7 @@ public class FileUtils {
     } 
 
     /** Utility method for HuffmanDecoder. */
-    public static void writeCharArray(String filename, char[] chars) {
+    public static void writeCharArray(String filename, Character[] chars) {
         BinaryOut out = new BinaryOut(filename);
         for (char c : chars) {
             out.write(c);
